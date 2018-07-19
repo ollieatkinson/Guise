@@ -10,6 +10,11 @@ This command line tool is meant to be used in an `Xcode` `Run Script Phase`.
 
 ![screenshot](Screenshots/xcode_run_script_phase.jpg)
 
+### Download a pre-built release
+
+1. Head over to [Releases](https://github.com/ollieatkinson/swift-public-api-generator/releases)
+2. Download `public-api-generator` from one of the versions
+
 ### Install from source
 
 ```bash

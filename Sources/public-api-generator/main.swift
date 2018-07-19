@@ -1,6 +1,8 @@
 import Foundation
 import SourceKittenFramework
 
+print("public-api-generator version v1.0.0")
+
 /*-----------------------------------------------------------------------------------------
 // MARK: - Extract build environment variables
 -----------------------------------------------------------------------------------------*/

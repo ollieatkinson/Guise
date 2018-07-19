@@ -10,13 +10,17 @@ This command line tool is meant to be used in an `Xcode` `Run Script Phase`.
 
 ![screenshot](Screenshots/xcode_run_script_phase.jpg)
 
+### Install from source
+
+```bash
+make release
+```
+
 ## Motivation & Discovery
 
-I was at a stage where me and my team were creating modules for an iOS app, this helped up seperate concerns - however we rarely did an API review of those modules. 
+I was at a stage where me and my team were creating modules for an iOS app, this helped us seperate concerns - but we rarely did an API review of those modules because it wasn't easy. And being able to review the API is something we deemed quite important as a team moving forward. By reviewing the API we can question the interface and care less about what's behind it, because that can be refactored at a later date.
 
-And being able to review the API is something we deemed quite important as a team moving forward. By reviewing the API, we can question the interface and care less about what's behind it - because that can be refactored at a later date.
-
-One of the team members noticed if you `CMD + Click` on the module name (`import FeatureA`), you see a generated interface! Bingo! This looked like the information what we needed to get. 
+One of the team members noticed if you `⌘ + Click` on the module name (`import FeatureA`), you see a generated interface! Bingo! This looked like the information what we needed to get. 
 
 I knew a tool called [sourcekitten](https://github.com/jpsim/SourceKitten) existed, which allows you to interact with SourceKit, and specifically remember reading how to log exactly what it's doing using a little trick [shown here](https://www.jpsim.com/uncovering-sourcekit/).
 
@@ -164,4 +168,8 @@ key.toolchains:
 key.synthesizedextensions: 1
 ```
 
-So... after all of that, we can now use `API.swift` to track the changes to a public interface of a module during code review.
+I initially created a bash script for this https://gist.github.com/ollieatkinson/b8b84a1de3e06946abb76eeeada73574, which worked fine but I wanted to play around with a swift command line tool.
+
+So... after all of that, we can now use `public-api-generator` to generate `API.swift` and track the changes to a public interface of a module during code review.
+
+Cheers 🍻

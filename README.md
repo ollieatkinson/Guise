@@ -1,6 +1,6 @@
 # Generate Public API
 
-This command line tool will generate the public interface for a swift module using [sourcekitten](https://github.com/jpsim/SourceKitten). The tool will infer the environment variables set by xcode build and write it's contents to a file `API.swift` located in the modules project directory.
+This command line tool will generate the public interface for a swift module using [sourcekitten](https://github.com/jpsim/SourceKitten). The tool will infer the environment variables set by xcode build and write it's contents to a file `API.swift` located in the modules project directory so that you are able to review the differences during code review.
 
 ![screenshot](Screenshots/generated_api_swift.jpg)
 
@@ -19,6 +19,15 @@ This command line tool is meant to be used in an `Xcode` `Run Script Phase`.
 
 ```bash
 make release
+```
+
+The binary will be output at the top level of the directory.
+
+### Development
+
+```bash
+make project
+open public-api-generator.xcodeproj
 ```
 
 ## Motivation & Discovery
@@ -175,6 +184,6 @@ key.synthesizedextensions: 1
 
 I initially created a bash script for this https://gist.github.com/ollieatkinson/b8b84a1de3e06946abb76eeeada73574, which worked fine but I wanted to play around with a swift command line tool.
 
-So... after all of that, we can now use `public-api-generator` to generate `API.swift` and track the changes to a public interface of a module during code review.
+So... after all of that, we can now use the tool `public-api-generator` to generate `API.swift` and track the changes to a public interface of a module during code review.
 
 Cheers 🍻

@@ -1,9 +1,23 @@
 import Foundation
 import SourceKittenFramework
 
+protocol SourceKittenRequest {
+  func send() throws -> [String: SourceKitRepresentable]
+}
+
+extension SourceKittenFramework.Request: SourceKittenRequest { }
+
 struct APIGenerator {
 
   let buildArguments: BuildArguments
+  
+  init(buildArguments: BuildArguments) {
+    self.buildArguments = buildArguments
+  }
+  
+  var makeSourceKittenRequest: (_ yaml: String) -> SourceKittenRequest = { yaml in
+    return Request.yamlRequest(yaml: yaml)
+  }
   
   func generate() throws -> String {
     
@@ -30,7 +44,7 @@ struct APIGenerator {
     key.synthesizedextensions: 1
     """
     
-    guard let source = try Request.yamlRequest(yaml: yaml).send()["key.sourcetext"] as? String else {
+    guard let source = try makeSourceKittenRequest(yaml).send()["key.sourcetext"] as? String else {
       throw APIGeneratorError.noSourceTextGenerated
     }
 

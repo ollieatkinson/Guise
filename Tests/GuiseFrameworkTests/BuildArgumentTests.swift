@@ -55,5 +55,40 @@ final class BuildArgumentTests: XCTestCase {
     XCTAssertEqual(buildArguments.deploymentTarget, "8")
     
   }
+  
+  func testDecodeThrowsBuildArgumentRequired() throws {
+    
+    var environmentWithNoConfigurationBuildDir = environment
+    environmentWithNoConfigurationBuildDir.removeValue(forKey: "CONFIGURATION_BUILD_DIR")
+    
+    let extractor = BuildArgumentsExtractor(environment: environmentWithNoConfigurationBuildDir)
+    
+    XCTAssertThrowsError(try extractor.makeBuildArguments()) { error in
+      guard case .buildArgumentRequired(name: let missingArgument)? = error as? APIGeneratorError else {
+        return XCTFail("Expecting APIGenerator.buildArgumentRequired(name:) error.")
+      }
+      
+      XCTAssertEqual(missingArgument, "CONFIGURATION_BUILD_DIR")
+    }
+    
+  }
+  
+  func testDecodeThrowsBuildArgumentRequiredForMissingDeploymentTarget() throws {
+    
+    var environmentWithNoDeploymentTarget = environment
+    environmentWithNoDeploymentTarget.removeValue(forKey: "IPHONEOS_DEPLOYMENT_TARGET")
+    environmentWithNoDeploymentTarget.removeValue(forKey: "MACOSX_DEPLOYMENT_TARGET")
+    
+    let extractor = BuildArgumentsExtractor(environment: environmentWithNoDeploymentTarget)
+    
+    XCTAssertThrowsError(try extractor.makeBuildArguments()) { error in
+      guard case .buildArgumentRequired(name: let missingArgument)? = error as? APIGeneratorError else {
+        return XCTFail("Expecting APIGenerator.buildArgumentRequired(name:) error.")
+      }
+      
+      XCTAssertEqual(missingArgument, "IPHONEOS_DEPLOYMENT_TARGET or MACOSX_DEPLOYMENT_TARGET")
+    }
+    
+  }
 
 }

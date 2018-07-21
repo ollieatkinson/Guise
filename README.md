@@ -1,4 +1,6 @@
-# Generate Public API
+[![Build Status](https://travis-ci.com/ollieatkinson/Guise.svg?branch=master)](https://travis-ci.com/ollieatkinson/Guise)
+
+# Guise - Generate Public API for Swift
 
 This command line tool will generate the public interface for a swift module using [sourcekitten](https://github.com/jpsim/SourceKitten). The tool will infer the environment variables set by xcode build and write it's contents to a file `API.swift` located in the modules project directory so that you are able to review the differences during code review.
 
@@ -12,8 +14,8 @@ This command line tool is meant to be used in an `Xcode` `Run Script Phase`.
 
 ### Download a pre-built release
 
-1. Head over to [Releases](https://github.com/ollieatkinson/swift-public-api-generator/releases)
-2. Download `public-api-generator` from one of the versions
+1. Head over to [Releases](https://github.com/ollieatkinson/Guise/releases)
+2. Download `guise` from one of the versions
 
 ### Install from source
 
@@ -184,6 +186,6 @@ key.synthesizedextensions: 1
 
 I initially created a bash script for this https://gist.github.com/ollieatkinson/b8b84a1de3e06946abb76eeeada73574, which worked fine but I wanted to play around with a swift command line tool.
 
-So... after all of that, we can now use the tool `public-api-generator` to generate `API.swift` and track the changes to a public interface of a module during code review.
+So... after all of that, we can now use the tool `guise` to generate `API.swift` and track the changes to a public interface of a module during code review.
 
 Cheers 🍻

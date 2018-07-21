@@ -3,4 +3,7 @@ debug:
 
 release:
 	- swift build -Xswiftc -O --configuration release --static-swift-stdlib
-	- cp .build/release/public-api-generator ./
+	- mkdir -p bin && cp .build/release/guise bin
+
+project:
+	- swift package generate-xcodeproj

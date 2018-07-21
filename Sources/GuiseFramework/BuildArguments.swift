@@ -40,7 +40,13 @@ struct BuildArgumentsExtractor {
 
   func makeBuildArguments() throws -> BuildArguments {
     do {
-      return try JSONDecoder().decode(BuildArguments.self, from: JSONEncoder().encode(environment))
+      let buildArguments = try JSONDecoder().decode(BuildArguments.self, from: JSONEncoder().encode(environment))
+      
+      if buildArguments.phoneOSDeploymentTarget == nil && buildArguments.macOSDeploymentTarget == nil {
+        throw APIGeneratorError.buildArgumentRequired(name: "\(BuildArguments.CodingKeys.phoneOSDeploymentTarget.rawValue) or \(BuildArguments.CodingKeys.macOSDeploymentTarget.rawValue)")
+      }
+      
+      return buildArguments
     } catch DecodingError.keyNotFound(let key, _) {
       throw APIGeneratorError.buildArgumentRequired(name: key.stringValue)
     }

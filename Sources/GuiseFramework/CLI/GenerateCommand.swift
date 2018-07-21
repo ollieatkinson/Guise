@@ -16,12 +16,9 @@ struct GenerateCommand: CommandProtocol {
   struct Options: OptionsProtocol {
     
     let path: String
-    let noDocumentation: Bool
     
-    static func create(path: String) -> (_ noDocumentation: Bool) -> Options {
-      return { noDocumentation in
-        return self.init(path: path, noDocumentation: noDocumentation)
-      }
+    static func create(path: String) -> Options {
+      return self.init(path: path)
     }
     
     static func evaluate(_ mode: CommandMode) -> Result<Options, CommandantError<APIGeneratorError>> {
@@ -36,7 +33,6 @@ struct GenerateCommand: CommandProtocol {
       
       return create
         <*> mode <| Option(key: "output-file", defaultValue: defaultValue, usage: "the output path to the API.swift file, defaults to $PROJECT_DIR/API.swift")
-        <*> mode <| Option(key: "no-documentation", defaultValue: false, usage: "omit the documentation from the API.swift file")
     }
   }
   

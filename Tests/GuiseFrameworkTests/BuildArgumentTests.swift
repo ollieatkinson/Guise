@@ -23,12 +23,12 @@ final class BuildArgumentTests: XCTestCase {
     
     XCTAssertEqual(buildArguments.configurationBuildDir, "1")
     XCTAssertEqual(buildArguments.currentArch, "2")
-    XCTAssertEqual(buildArguments.phoneOSDeploymentTarget, "7")
-    XCTAssertEqual(buildArguments.macOSDeploymentTarget, "8")
     XCTAssertEqual(buildArguments.productModuleName, "3")
     XCTAssertEqual(buildArguments.projectDir, "4")
     XCTAssertEqual(buildArguments.sdkDir, "5")
     XCTAssertEqual(buildArguments.swiftPlatformTargetPrefix, "6")
+    XCTAssertEqual(buildArguments.phoneOSDeploymentTarget, "7")
+    XCTAssertEqual(buildArguments.macOSDeploymentTarget, "8")
     XCTAssertEqual(buildArguments.toolchainDir, "9")
     
   }

@@ -4,9 +4,10 @@ struct RemoveComments: TextProcessor {
 
   func process(input: String) throws -> String {
 
-    return input.split(separator: "\n").filter({ line in
-      line.range(of: " *\\/\\/\\/", options: .regularExpression) == nil
-    }).joined(separator: "\n")
+    return input
+      .split(separator: "\n", omittingEmptySubsequences: false)
+      .filter { $0.range(of: " *\\/{3}", options: .regularExpression) == nil }
+      .joined(separator: "\n")
     
   }
   

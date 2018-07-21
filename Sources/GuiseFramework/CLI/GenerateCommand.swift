@@ -1,5 +1,7 @@
+import Foundation
 import Commandant
 import Result
+import SourceKittenFramework
 
 struct GenerateCommand: CommandProtocol {
   
@@ -8,30 +10,33 @@ struct GenerateCommand: CommandProtocol {
   }
   
   public var function: String {
-    return "Generate API.swift `public-api-generator generate --output-file path/to/API.swift` default will write to $PROJECT_DIR/API.swift"
+    return "Generate API.swift"
   }
   
   struct Options: OptionsProtocol {
     
     let path: String
+    let noDocumentation: Bool
     
-    static func create(path: String) -> Options {
-      return self.init(path: path)
+    static func create(path: String) -> (_ noDocumentation: Bool) -> Options {
+      return { noDocumentation in
+        return self.init(path: path, noDocumentation: noDocumentation)
+      }
     }
     
     static func evaluate(_ mode: CommandMode) -> Result<Options, CommandantError<APIGeneratorError>> {
       
       let defaultValue: String
       
-      if let PROJECT_DIR = try? BuildArgumentsExtractor().makeBuildArguments(processInfo: .processInfo).PROJECT_DIR {
-        defaultValue = "\(PROJECT_DIR)/API.swift"
+      if let projectDir = try? BuildArgumentsExtractor().makeBuildArguments().projectDir {
+        defaultValue = "\(projectDir)/API.swift"
       } else {
         defaultValue = "API.swift"
       }
       
       return create
-        <*> mode
-        <| Option(key: "output-file", defaultValue: defaultValue, usage: "the output path to the API.swift file, defaults to $PROJECT_DIR/API.swift")
+        <*> mode <| Option(key: "output-file", defaultValue: defaultValue, usage: "the output path to the API.swift file, defaults to $PROJECT_DIR/API.swift")
+        <*> mode <| Option(key: "no-documentation", defaultValue: false, usage: "omit the documentation from the API.swift file")
     }
   }
   
@@ -49,7 +54,7 @@ struct GenerateCommand: CommandProtocol {
     let buildArguments: BuildArguments
     
     do {
-      buildArguments = try BuildArgumentsExtractor().makeBuildArguments(processInfo: .processInfo)
+      buildArguments = try BuildArgumentsExtractor().makeBuildArguments()
     } catch let error {
       
       if let apiGeneratorError = error as? APIGeneratorError {
@@ -64,7 +69,7 @@ struct GenerateCommand: CommandProtocol {
      // MARK: - Request interface from SourceKittenFramework using YAML
      -----------------------------------------------------------------------------------------*/
     
-    let source: String
+    var source: String
     
     do {
       source = try APIGenerator(buildArguments: buildArguments).generate()

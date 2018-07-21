@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/ollieatkinson/Guise.svg?branch=master)](https://travis-ci.com/ollieatkinson/Guise)
+
 # Guise - Generate Public API for Swift
 
 This command line tool will generate the public interface for a swift module using [sourcekitten](https://github.com/jpsim/SourceKitten). The tool will infer the environment variables set by xcode build and write it's contents to a file `API.swift` located in the modules project directory so that you are able to review the differences during code review.

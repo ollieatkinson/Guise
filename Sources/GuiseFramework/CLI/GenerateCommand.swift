@@ -81,7 +81,6 @@ struct GenerateCommand: CommandProtocol {
       }
     }
     
-    
     var textProcessors: [TextProcessor] = [
       RemoveSwiftOnoneSupport()
     ]

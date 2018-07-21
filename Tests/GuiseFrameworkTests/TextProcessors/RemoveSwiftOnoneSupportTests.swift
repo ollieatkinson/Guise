@@ -3,11 +3,19 @@ import XCTest
 
 class RemoveSwiftOnoneSupportTests: XCTestCase {
   
-  func testRemoveIfPresent() throws {
+  func testRemoveIfPresentAtTop() throws {
     
     let systemUnderTest = RemoveSwiftOnoneSupport()
     
-    XCTAssertEqual(try systemUnderTest.process(input: "\nimport SwiftOnoneSupport\nimport Foundation"), "\nimport Foundation", "SwiftOnoneSupport should be removed, but it was not.")
+    XCTAssertEqual(try systemUnderTest.process(input: "import SwiftOnoneSupport\nimport Foundation"), "import Foundation", "SwiftOnoneSupport should be removed, but it was not.")
+    
+  }
+  
+  func testRemoveIfPresentInMiddle() throws {
+    
+    let systemUnderTest = RemoveSwiftOnoneSupport()
+    
+    XCTAssertEqual(try systemUnderTest.process(input: "import GuiseFramework\nimport SwiftOnoneSupport\nimport Foundation"), "import GuiseFramework\nimport Foundation", "SwiftOnoneSupport should be removed, but it was not.")
     
   }
   
@@ -15,7 +23,7 @@ class RemoveSwiftOnoneSupportTests: XCTestCase {
     
     let systemUnderTest = RemoveSwiftOnoneSupport()
     
-    XCTAssertEqual(try systemUnderTest.process(input: "\nimport GuiseFramework\nimport Foundation"), "\nimport GuiseFramework\nimport Foundation", "The input should not be modified, but it was.")
+    XCTAssertEqual(try systemUnderTest.process(input: "import GuiseFramework\nimport Foundation"), "import GuiseFramework\nimport Foundation", "The input should not be modified, but it was.")
     
   }
     

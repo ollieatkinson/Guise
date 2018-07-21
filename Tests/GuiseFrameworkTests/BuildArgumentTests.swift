@@ -55,5 +55,22 @@ final class BuildArgumentTests: XCTestCase {
     XCTAssertEqual(buildArguments.deploymentTarget, "8")
     
   }
+  
+  func testDecodeThrowsBuildArgumentRequired() throws {
+    
+    var environmentWithNoConfigurationBuildDir = environment
+    environmentWithNoConfigurationBuildDir.removeValue(forKey: "CONFIGURATION_BUILD_DIR")
+    
+    let extractor = BuildArgumentsExtractor(environment: environmentWithNoConfigurationBuildDir)
+    
+    XCTAssertThrowsError(try extractor.makeBuildArguments()) { error in
+      guard case .buildArgumentRequired(name: let missingArgument)? = error as? APIGeneratorError else {
+        return XCTFail("Expecting APIGenerator.buildArgumentRequired(name:) error.")
+      }
+      
+      XCTAssertEqual(missingArgument, "CONFIGURATION_BUILD_DIR")
+    }
+    
+  }
 
 }

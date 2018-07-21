@@ -39,7 +39,11 @@ struct BuildArgumentsExtractor {
   }
 
   func makeBuildArguments() throws -> BuildArguments {
-    return try JSONDecoder().decode(BuildArguments.self, from: JSONEncoder().encode(environment))
+    do {
+      return try JSONDecoder().decode(BuildArguments.self, from: JSONEncoder().encode(environment))
+    } catch DecodingError.keyNotFound(let key, _) {
+      throw APIGeneratorError.buildArgumentRequired(name: key.stringValue)
+    }
   }
   
 }

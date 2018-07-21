@@ -46,40 +46,27 @@ struct GenerateCommand: CommandProtocol {
     if options.path.isEmpty {
       return .failure(.invalidArgument(description: "path must be provided"))
     }
+
+    return extractBuildArguments()
+      .flatMap(generateAPI)
+      .flatMap(postGenerationTextProcessing(options: options))
+      .flatMap(writeToFile(options: options))
     
-    /*-----------------------------------------------------------------------------------------
-     // MARK: - Extract build environment variables
-     -----------------------------------------------------------------------------------------*/
-    
-    let buildArguments: BuildArguments
-    
-    do {
-      buildArguments = try BuildArgumentsExtractor().makeBuildArguments()
-    } catch let error {
-      
-      if let apiGeneratorError = error as? APIGeneratorError {
-        return .failure(apiGeneratorError)
-      } else {
-        return .failure(.unexpectedError(error: error))
-      }
-      
-    }
-    
-    /*-----------------------------------------------------------------------------------------
-     // MARK: - Request interface from SourceKittenFramework using YAML
-     -----------------------------------------------------------------------------------------*/
-    
-    var source: String
-    
-    do {
-      source = try APIGenerator(buildArguments: buildArguments).generate()
-    } catch let error {
-      if let apiGeneratorError = error as? APIGeneratorError {
-        return .failure(apiGeneratorError)
-      } else {
-        return .failure(.unexpectedError(error: error))
-      }
-    }
+  }
+  
+}
+
+private extension GenerateCommand {
+  
+  func extractBuildArguments() -> Result<BuildArguments, APIGeneratorError> {
+    return Result(try BuildArgumentsExtractor().makeBuildArguments()).mapError(APIGeneratorError.init(error:))
+  }
+  
+  func generateAPI(_ buildArguments: BuildArguments) -> Result<String, APIGeneratorError> {
+    return Result(try APIGenerator(buildArguments: buildArguments).generate()).mapError(APIGeneratorError.init(error:))
+  }
+  
+  func postGenerationTextProcessing(options: Options) -> (_ source: String) -> Result<String, APIGeneratorError> {
     
     var textProcessors: [TextProcessor] = [
       RemoveSwiftOnoneSupport()
@@ -89,20 +76,15 @@ struct GenerateCommand: CommandProtocol {
       textProcessors.append(RemoveComments())
     }
     
-    do {
-      source = try textProcessors.reduce(source, { try $1.process(input: $0) })
-    } catch {
-      return .failure(.unexpectedError(error: error))
+    return { source in
+      Result(attempt: { try textProcessors.reduce(source, { try $1.process(input: $0) }) }).mapError({ .failedToWrite(path: options.path, error: $0) })
     }
-    
-    do {
-      try source.write(toFile: options.path, atomically: true, encoding: .utf8)
-    } catch {
-      return .failure(.failedToWrite(path: options.path, error: error))
+  }
+  
+  func writeToFile(options: Options) -> (_ source: String) -> Result<Void, APIGeneratorError> {
+    return { source in
+      Result(attempt: { try source.write(toFile: options.path, atomically: true, encoding: .utf8) }).mapError({ .failedToWrite(path: options.path, error: $0) })
     }
-
-    return .success(())
-    
   }
   
 }

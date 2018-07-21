@@ -8,8 +8,8 @@ let package = Package(
         .executable(name: "guise", targets: ["guise"])
     ],
     dependencies: [
-      .package(url: "https://github.com/Carthage/Commandant.git", from: "0.13.0"),
-      .package(url: "https://github.com/jpsim/SourceKitten.git", from: "0.21.1")
+        .package(url: "https://github.com/Carthage/Commandant.git", from: "0.13.0"),
+        .package(url: "https://github.com/jpsim/SourceKitten.git", from: "0.21.1")
     ],
     targets: [
         .target(name: "guise", dependencies: [ "GuiseFramework" ]),

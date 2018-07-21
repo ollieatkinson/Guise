@@ -8,7 +8,7 @@ struct VersionCommand: CommandProtocol {
   }
 
   public var function: String {
-    return "Display the current version of public-api-generator"
+    return "Display the current version of guise"
   }
   
   /// Runs this subcommand with the given options.

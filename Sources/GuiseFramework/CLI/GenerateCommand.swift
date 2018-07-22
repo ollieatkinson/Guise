@@ -42,10 +42,6 @@ struct GenerateCommand: CommandProtocol {
   
   /// Runs this subcommand with the given options.
   public func run(_ options: Options) -> Result<(), APIGeneratorError> {
-    
-    if options.path.isEmpty {
-      return .failure(.invalidArgument(description: "path must be provided"))
-    }
 
     return extractBuildArguments()
       .flatMap(generateAPI)
@@ -77,13 +73,18 @@ private extension GenerateCommand {
     }
     
     return { source in
-      Result(attempt: { try textProcessors.reduce(source, { try $1.process(input: $0) }) }).mapError({ .failedToWrite(path: options.path, error: $0) })
+      Result(attempt: { try textProcessors.reduce(source, { try $1.process(input: $0) }) }).mapError({ .textProcessingFailed(error: $0) })
     }
   }
   
   func writeToFile(options: Options) -> (_ source: String) -> Result<Void, APIGeneratorError> {
     return { source in
-      Result(attempt: { try source.write(toFile: options.path, atomically: true, encoding: .utf8) }).mapError({ .failedToWrite(path: options.path, error: $0) })
+      
+      if options.path.isEmpty {
+        return .failure(.invalidArgument(description: "path must be provided"))
+      } else {
+        return Result(attempt: { try source.write(toFile: options.path, atomically: true, encoding: .utf8) }).mapError({ .failedToWrite(path: options.path, error: $0) })
+      }
     }
   }
   

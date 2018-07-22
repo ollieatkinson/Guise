@@ -7,3 +7,7 @@ release:
 
 project:
 	- swift package generate-xcodeproj
+
+integration-test: release
+	- cd Fixtures/CommandLineFixture && xcodebuild -scheme CommandLineFixture -configuration release > /dev/null
+	- diff Fixtures/CommandLineFixture/Expected.swift Fixtures/CommandLineFixture/Generated.swift

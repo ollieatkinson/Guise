@@ -13,7 +13,7 @@ struct VersionCommand: CommandProtocol {
   
   /// Runs this subcommand with the given options.
   public func run(_ options: NoOptions<APIGeneratorError>) -> Result<(), APIGeneratorError> {
-    print(Version.current.value)
+    print(Version)
     return .success(())
   }
   

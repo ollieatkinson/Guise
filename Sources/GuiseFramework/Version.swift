@@ -1,4 +1,1 @@
-public struct Version {
-  public let value: String
-  public static let current = Version(value: "1.0.1")
-}
+let Version = "1.0.1"

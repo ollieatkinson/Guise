@@ -1,9 +1,11 @@
 import XCTest
+import Result
+
 @testable import GuiseFramework
 
 class RemoveCommentsTests: XCTestCase {
   
-  func testStripComments() throws {
+  func testStripComments() {
     
     let input = """
 /// This is a doc comment for my structure
@@ -20,12 +22,12 @@ struct MyStructure {
 """
     
     let systemUnderTest = RemoveComments()
-    
-    XCTAssertEqual(try systemUnderTest.process(input: input), expected)
+
+    XCTAssertEqual(systemUnderTest.process(input: input).value, expected)
     
   }
   
-  func testStripCommentsDoNotRemoveWhitespaceLines() throws {
+  func testStripCommentsDoNotRemoveWhitespaceLines() {
     
     let input = """
 /// This is a doc comment for my structure
@@ -47,7 +49,7 @@ struct MyStructure {
     
     let systemUnderTest = RemoveComments()
     
-    XCTAssertEqual(try systemUnderTest.process(input: input), expected)
+    XCTAssertEqual(systemUnderTest.process(input: input).value, expected)
     
   }
   

@@ -73,8 +73,11 @@ private extension GenerateCommand {
     }
     
     return { source in
-      Result(attempt: { try textProcessors.reduce(source, { try $1.process(input: $0) }) }).mapError({ .textProcessingFailed(error: $0) })
+      return textProcessors.reduce(.success(source)) { result, textProcessor in
+        return result.flatMap(textProcessor.process(input:))
+      }
     }
+    
   }
   
   func writeToFile(options: Options) -> (_ source: String) -> Result<Void, APIGeneratorError> {

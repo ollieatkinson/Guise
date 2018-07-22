@@ -1,3 +1,5 @@
+import Result
+
 protocol TextProcessor {
-  func process(input: String) throws -> String
+  func process(input: String) -> Result<String, APIGeneratorError>
 }

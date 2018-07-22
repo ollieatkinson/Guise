@@ -7,6 +7,16 @@ enum APIGeneratorError: Error, CustomStringConvertible {
   case failedToWrite(path: String, error: Error)
   case unexpectedError(error: Error)
   
+  init(error: Error) {
+    
+      if let error = error as? APIGeneratorError {
+        self = error
+      } else {
+        self = .unexpectedError(error: error)
+      }
+    
+  }
+  
   var description: String {
     
     switch self {

@@ -5,6 +5,7 @@ enum APIGeneratorError: Error, CustomStringConvertible {
   case failedToExtractToolchainIdentifier(plistPath: String)
   case invalidArgument(description: String)
   case failedToWrite(path: String, error: Error)
+  case textProcessingFailed(error: Error)
   case unexpectedError(error: Error)
   
   init(error: Error) {
@@ -30,6 +31,8 @@ enum APIGeneratorError: Error, CustomStringConvertible {
       return "Unexpected error \(error)"
     case .failedToWrite(path: let path, error: let error):
       return "Failed to write to \"\(path)\" \(error)"
+    case .textProcessingFailed(error: let error):
+      return "Post generation text processing failed \(error)"
     case .invalidArgument(let description):
       return description
     }

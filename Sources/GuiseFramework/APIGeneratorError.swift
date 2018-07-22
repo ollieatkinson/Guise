@@ -4,7 +4,7 @@ enum APIGeneratorError: Error, CustomStringConvertible {
   case buildArgumentRequired(name: String)
   case failedToExtractToolchainIdentifier(plistPath: String)
   case invalidArgument(description: String)
-  case failedToWrite(path: String, error: Error)
+  case failedToPrint
   case textProcessingFailed(error: Error)
   case unexpectedError(error: Error)
   
@@ -29,8 +29,8 @@ enum APIGeneratorError: Error, CustomStringConvertible {
       return "Couldn't read Identifier from \(plistPath)"
     case .unexpectedError(error: let error):
       return "Unexpected error \(error)"
-    case .failedToWrite(path: let path, error: let error):
-      return "Failed to write to \"\(path)\" \(error)"
+    case .failedToPrint:
+      return "Failed to write to stdout"
     case .textProcessingFailed(error: let error):
       return "Post generation text processing failed \(error)"
     case .invalidArgument(let description):

@@ -5,7 +5,7 @@ final class BuildArgumentTests: XCTestCase {
 
   let environment = [
     "CONFIGURATION_BUILD_DIR": "1",
-    "CURRENT_ARCH": "2",
+    "ARCHS": "2 A B",
     "PRODUCT_MODULE_NAME": "3",
     "PROJECT_DIR": "4",
     "SDK_DIR": "5",
@@ -22,7 +22,7 @@ final class BuildArgumentTests: XCTestCase {
     let buildArguments = try extractor.makeBuildArguments()
     
     XCTAssertEqual(buildArguments.configurationBuildDir, "1")
-    XCTAssertEqual(buildArguments.currentArch, "2")
+    XCTAssertEqual(buildArguments.archs, "2 A B")
     XCTAssertEqual(buildArguments.productModuleName, "3")
     XCTAssertEqual(buildArguments.projectDir, "4")
     XCTAssertEqual(buildArguments.sdkDir, "5")

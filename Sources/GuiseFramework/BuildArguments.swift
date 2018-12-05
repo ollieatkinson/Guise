@@ -3,7 +3,7 @@ import Foundation
 struct BuildArguments: Decodable {
   
   let configurationBuildDir: String
-  let currentArch: String
+  let archs: String
   let phoneOSDeploymentTarget: String?
   let macOSDeploymentTarget: String?
   let productModuleName: String
@@ -18,7 +18,7 @@ struct BuildArguments: Decodable {
   
   enum CodingKeys: String, CodingKey {
     case configurationBuildDir = "CONFIGURATION_BUILD_DIR"
-    case currentArch = "CURRENT_ARCH"
+    case archs = "ARCHS"
     case phoneOSDeploymentTarget = "IPHONEOS_DEPLOYMENT_TARGET"
     case macOSDeploymentTarget = "MACOSX_DEPLOYMENT_TARGET"
     case productModuleName = "PRODUCT_MODULE_NAME"

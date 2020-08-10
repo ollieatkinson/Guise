@@ -11,12 +11,16 @@ struct APIGenerator {
       throw APIGeneratorError.failedToExtractToolchainIdentifier(plistPath: "\(buildArguments.toolchainDir)/ToolchainInfo.plist)")
     }
     
+    guard let currentArch = buildArguments.archs.split(separator: " ").first else {
+        throw APIGeneratorError.invalidArgument(description: "ARCHS expected to have space-separated list of identifiers.")
+    }
+    
     let yaml = """
     key.request: source.request.editor.open.interface
     key.name: "\(NSUUID().uuidString)"
     key.compilerargs:
     - "-target"
-    - "\(buildArguments.currentArch)-apple-\(buildArguments.swiftPlatformTargetPrefix)\(buildArguments.deploymentTarget)"
+    - "\(currentArch)-apple-\(buildArguments.swiftPlatformTargetPrefix)\(buildArguments.deploymentTarget)"
     - "-sdk"
     - "\(buildArguments.sdkDir)"
     - "-I"
